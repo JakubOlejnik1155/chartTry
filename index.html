@@ -5,9 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chart</title>
+    <style>
+        .contentWrapper{
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .graphHolder{
+            width: 100%;
+            height: 37vw;
+        }
+    </style>
 </head>
-<body>
-    <div class="chart"></div>
+<body id="corpoObligationsPage">
+    <div class="contentWrapper">
+        <div class="buttonsContainer">
+            <button id="cert">change data</button>
+            <button id="back">change data2</button>
+        </div>
+        <div class="graphHolder"></div>
+    </div>
     <script src="./data.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="./index.js"></script>
