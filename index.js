@@ -51,7 +51,6 @@ window.addEventListener("DOMContentLoaded", () => {
                 .text(data.y))
 
 
-
         /*----------
             tooltip functions
         ----------*/
@@ -86,12 +85,14 @@ window.addEventListener("DOMContentLoaded", () => {
             text.attr("transform", `translate(${-w / 2},${15 - y})`);
             path.attr("d", `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`);
         }
+
         function formatValue(value) {
             return value.toLocaleString("en", {
                 style: "currency",
                 currency: "USD"
             });
         }
+
         function formatDate(date) {
             return date.toLocaleString("en", {
                 month: "short",
@@ -100,16 +101,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 timeZone: "UTC"
             });
         }
-        function bisect ()
-        {
+
+        function bisect(mx) {
             const bisect = d3.bisector(d => d.date).left;
-            return mx => {
-                const date = x.invert(mx);
-                const index = bisect(data, date, 1);
-                const a = data[index - 1];
-                const b = data[index];
-                return b && (date - a.date > b.date - date) ? b : a;
-            };
+            const date = x.invert(mx);
+            const index = bisect(data, date, 1);
+            const a = data[index - 1];
+            const b = data[index];
+            return b && (date - a.date > b.date - date) ? b : a;
         }
 
 
@@ -120,11 +119,11 @@ window.addEventListener("DOMContentLoaded", () => {
                 .style("overflow", "visible");
 
             svg.append("g")
-                .attr("class","myXaxis")
+                .attr("class", "myXaxis")
                 .call(xAxis);
 
             svg.append("g")
-                .attr("class","myYaxis")
+                .attr("class", "myYaxis")
                 .call(yAxis);
 
             svg.append("path")
@@ -142,10 +141,8 @@ window.addEventListener("DOMContentLoaded", () => {
             ----------*/
             const tooltip = svg.append("g");
 
-            svg.on("touchmove mousemove", function(event) {
+            svg.on("touchmove mousemove", function (event) {
                 const {date, value} = bisect(d3.pointer(event, this)[0]);
-                console.log(bisect(d3.pointer(event, this)[0]))
-
                 tooltip
                     .attr("transform", `translate(${x(date)},${y(value)})`)
                     .call(callout, `${formatValue(value)} ${formatDate(date)}`);
@@ -159,20 +156,24 @@ window.addEventListener("DOMContentLoaded", () => {
             //UPDATE DATA
             //--------------
 
-            document.querySelector('#cert').addEventListener('click', ()=>{
+            document.querySelector('#cert').addEventListener('click', () => {
                 console.log('update');
                 data = tempData.map(({date, value}) => ({
                     date: new Date(date).getTime() / 1000, value
                 }))
 
                 // Create the X axis:
-                x.domain([0, d3.max(data, function(d) { return d.date }) ]);
+                x.domain([0, d3.max(data, function (d) {
+                    return d.date
+                })]);
                 svg.selectAll(".myXaxis").transition()
                     .duration(3000)
                     .call(xAxis);
                 //
                 // // create the Y axis
-                y.domain([0, d3.max(data, function(d) { return d.value  }) ]);
+                y.domain([0, d3.max(data, function (d) {
+                    return d.value
+                })]);
                 svg.selectAll(".myYaxis")
                     .transition()
                     .duration(3000)
@@ -180,39 +181,45 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 // // Create a update selection: bind to the new data
                 var u = svg.selectAll("path")
-                    .data([data], function(d){ return d.date });
+                    .data([data], function (d) {
+                        return d.date
+                    });
                 //
                 // // Updata the line
-                // u
-                //     .enter()
-                //     .append("path")
-                //     .attr("class","line")
-                //     .merge(u)
-                //     .transition()
-                //     .duration(3000)
-                //     .attr("d", d3.line()
-                //         .x(function(d) { return x(d.date); })
-                //         .y(function(d) { return y(d.value); }))
-                //     .attr("fill", "none")
-                //     .attr("stroke", "steelblue")
-                //     .attr("stroke-width", 1)
+                u
+                    .enter()
+                    .append("path")
+                    .attr("class","line")
+                    .merge(u)
+                    .transition()
+                    .duration(3000)
+                    .attr("d", d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.value); }))
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-width", 1)
 
 
             });
 
 
-            document.querySelector('#back').addEventListener('click', ()=>{
+            document.querySelector('#back').addEventListener('click', () => {
                 console.log('update');
                 data = temp.slice(0, 100);
 
                 // Create the X axis:
-                x.domain([0, d3.max(data, function(d) { return d.date }) ]);
+                x.domain([0, d3.max(data, function (d) {
+                    return d.date
+                })]);
                 svg.selectAll(".myXaxis").transition()
                     .duration(3000)
                     .call(xAxis);
                 //
                 // // create the Y axis
-                y.domain([0, d3.max(data, function(d) { return d.value  }) ]);
+                y.domain([0, d3.max(data, function (d) {
+                    return d.value
+                })]);
                 svg.selectAll(".myYaxis")
                     .transition()
                     .duration(3000)
@@ -220,33 +227,32 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 // // Create a update selection: bind to the new data
                 var u = svg.selectAll("path")
-                    .data([data], function(d){ return d.date });
+                    .data([data], function (d) {
+                        return d.date
+                    });
                 //
                 // // Updata the line
-                // u
-                //     .enter()
-                //     .append("path")
-                //     .attr("class","line")
-                //     .merge(u)
-                //     .transition()
-                //     .duration(3000)
-                //     .attr("d", d3.line()
-                //         .x(function(d) { return x(d.date); })
-                //         .y(function(d) { return y(d.value); }))
-                //     .attr("fill", "none")
-                //     .attr("stroke", "steelblue")
-                //     .attr("stroke-width", 1)
+                u
+                    .enter()
+                    .append("path")
+                    .attr("class","line")
+                    .merge(u)
+                    .transition()
+                    .duration(3000)
+                    .attr("d", d3.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.value); }))
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-width", 1)
 
 
             })
 
 
-
-
             //return graph
             return svg.node();
         }
-
 
 
         //add Chart to DOM
